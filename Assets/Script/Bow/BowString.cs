@@ -7,6 +7,7 @@ public class BowString : MonoBehaviour
     [Header("References")]
     [SerializeField] private Bow bow; // 활 본체 참조
     [SerializeField] private Transform stringRestPosition; // 시위 기본 위치 (고정점)
+    [SerializeField] private BowStringMover stringMover;
 
     [Header("Draw Settings")]
     [SerializeField] private float maxDrawDistance = 0.5f;
@@ -32,11 +33,11 @@ public class BowString : MonoBehaviour
 
     private void OnReleased(SelectExitEventArgs args)
     {
-        if (bow == null || !bow.HasArrow()) return;
+        Debug.Log("[BowString] OnReleased called.");
 
         float drawDistance = Vector3.Distance(stringRestPosition.position, transform.position);
 
-        if (drawDistance >= minReleaseDistance)
+        if (bow != null && bow.HasArrow() && drawDistance >= minReleaseDistance)
         {
             float drawPercent = Mathf.Clamp01(drawDistance / maxDrawDistance);
             float force = drawPercent * firePowerMultiplier;
@@ -44,7 +45,9 @@ public class BowString : MonoBehaviour
             bow.FireArrow(force);
         }
 
-        // 시위 위치 복원
-        transform.position = stringRestPosition.position;
+        //시위 위치 복원
+        Debug.Log("[BowString] Requesting string restore.");
+        stringMover?.OnStringReleased();
     }
+
 }
