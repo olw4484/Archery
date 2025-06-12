@@ -813,7 +813,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3414512312254721017, guid: c95d2c8b05d17534baf64c9c16b6ff67, type: 3}
       propertyPath: m_Name
-      value: SM_MORGANA_ARROW
+      value: Arrow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -870,7 +870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8696570288230923979, guid: c7b4edf52f794fe43a9bd210e364e52c, type: 3}
       propertyPath: m_Name
-      value: SK_MORGANA_BOW
+      value: Bow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

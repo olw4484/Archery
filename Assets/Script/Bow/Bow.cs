@@ -11,6 +11,8 @@ public class Bow : MonoBehaviour
     public float maxDrawDistance = 0.5f;
     public float fireMultiplier = 30f;
 
+    public bool HasArrow() => currentArrow != null;
+
     private void Update()
     {
         if (currentArrow != null)
@@ -24,7 +26,7 @@ public class Bow : MonoBehaviour
         }
     }
 
-    private void FireArrow(float drawDistance)
+    public void FireArrow(float drawDistance)
     {
         Vector3 fireDirection = arrowSocket.forward;
         float force = Mathf.Clamp01(drawDistance / maxDrawDistance) * fireMultiplier;
@@ -48,4 +50,5 @@ public class Bow : MonoBehaviour
             }
         }
     }
+
 }
