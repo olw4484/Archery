@@ -60,3 +60,5 @@ Oculus/Tools/OVRADBTools/
 
 # Crashlytics (Android)
 crashlytics-build.properties
+/Assets/Imports
+/Assets/Resources
