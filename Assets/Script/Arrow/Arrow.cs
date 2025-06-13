@@ -14,6 +14,7 @@ public class Arrow : MonoBehaviour
     public bool IsFired() => isFired;
 
     [SerializeField] private float fireForce = 20f;
+    [SerializeField] private float windInfluence = 0.3f; 
 
     private void Awake()
     {
@@ -52,6 +53,15 @@ public class Arrow : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (!isFired || rb == null) return;
+
+        // ¹Ù¶÷ Èû Àû¿ë
+        Vector3 windForce = WindManager.Instance != null ? WindManager.Instance.WindForce : Vector3.zero;
+        rb.AddForce(windForce * windInfluence, ForceMode.Force);
+    }
+
 
     public void Fire(Vector3 direction)
     {
@@ -77,4 +87,6 @@ public class Arrow : MonoBehaviour
             Fire(transform.forward);
         }
     }
+
+
 }
