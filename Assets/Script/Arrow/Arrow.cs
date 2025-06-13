@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -8,7 +9,7 @@ public class Arrow : MonoBehaviour
 {
     private Rigidbody rb;
     private XRGrabInteractable grabInteractable;
-
+    public event System.Action OnTaken;
     private bool isFired = false;
     public bool IsFired() => isFired;
 
@@ -23,6 +24,10 @@ public class Arrow : MonoBehaviour
     private void OnEnable()
     {
         grabInteractable.selectExited.AddListener(OnRelease);
+
+        var grab = GetComponent<XRGrabInteractable>();
+        if (grab != null)
+            grab.selectEntered.AddListener(OnGrab);
     }
 
     private void OnDisable()
@@ -30,24 +35,8 @@ public class Arrow : MonoBehaviour
         grabInteractable.selectExited.RemoveListener(OnRelease);
     }
 
-    private void OnRelease(SelectExitEventArgs args)
-    {
-        if (!isFired)
-        {
-            Fire(transform.forward);
-        }
-    }
 
-    public void Fire(Vector3 direction)
-    {
-        if (isFired) return;
 
-        isFired = true;
-        rb.isKinematic = false;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.AddForce(direction * fireForce, ForceMode.Impulse);
-    }
     private void OnCollisionEnter(Collision collision)
     {
         if (!isFired) return;
@@ -60,6 +49,32 @@ public class Arrow : MonoBehaviour
 
             rb.isKinematic = true;
             transform.SetParent(collision.transform);
+        }
+    }
+
+
+    public void Fire(Vector3 direction)
+    {
+        if (isFired) return;
+
+        isFired = true;
+        rb.isKinematic = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.AddForce(direction * fireForce, ForceMode.Impulse);
+    }
+
+    private void OnGrab(SelectEnterEventArgs args)
+    {
+        OnTaken?.Invoke();
+        OnTaken = null; // 중복 호출 방지
+    }
+
+    private void OnRelease(SelectExitEventArgs args)
+    {
+        if (!isFired)
+        {
+            Fire(transform.forward);
         }
     }
 }
