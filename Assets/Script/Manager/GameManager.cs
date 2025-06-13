@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,7 +37,21 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        // 필요 시 씬 리셋, 점수 리셋 등 구현 예정
-        Debug.Log("[GameManager] RestartGame() 호출됨 (미구현)");
+        Debug.Log("[GameManager] Restarting game (soft reset)");
+
+        // 점수 초기화
+        ScoreManager.Instance?.ResetScore();
+
+        // 화살 리셋
+        arrowBucket?.ResetBucket();
+
+        // UI 숨기기
+        resultUI?.HideResult();
+
+        // 바람 랜덤화
+        WindManager.Instance?.RandomizeWind();
+
+        // 게임 상태 리셋
+        gameEnded = false;
     }
 }
