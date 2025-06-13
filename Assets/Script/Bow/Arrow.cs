@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -30,10 +31,9 @@ public class Arrow : MonoBehaviour
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        // 만약 장착 후 놓으면 발사되게 할 경우
         if (!isFired)
         {
-            Fire(transform.forward); // 전방 방향으로 발사
+            Fire(transform.forward);
         }
     }
 
@@ -46,5 +46,21 @@ public class Arrow : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.AddForce(direction * fireForce, ForceMode.Impulse);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!isFired) return;
+
+        if (collision.gameObject.CompareTag("Target"))
+        {
+            Debug.Log("[Arrow] Target hit!");
+
+            // 점수 시스템 호출 (임시로 10점 부여)
+            ScoreManager.Instance?.AddScore(10);
+
+            // 화살 고정 (움직이지 않도록)
+            rb.isKinematic = true;
+            transform.SetParent(collision.transform);
+        }
     }
 }
