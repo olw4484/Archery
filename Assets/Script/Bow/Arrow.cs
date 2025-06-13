@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using static UnityEngine.GraphicsBuffer;
 
 public class Arrow : MonoBehaviour
 {
@@ -51,14 +52,12 @@ public class Arrow : MonoBehaviour
     {
         if (!isFired) return;
 
-        if (collision.gameObject.CompareTag("Target"))
+        Target target = collision.gameObject.GetComponent<Target>();
+        if (target != null)
         {
-            Debug.Log("[Arrow] Target hit!");
+            ContactPoint contact = collision.contacts[0];
+            target.RegisterHit(contact.point);
 
-            // 점수 시스템 호출 (임시로 10점 부여)
-            ScoreManager.Instance?.AddScore(10);
-
-            // 화살 고정 (움직이지 않도록)
             rb.isKinematic = true;
             transform.SetParent(collision.transform);
         }
