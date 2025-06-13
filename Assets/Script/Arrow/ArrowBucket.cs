@@ -14,15 +14,16 @@ public class ArrowBucket : MonoBehaviour
     private void Start()
     {
         // 자식 오브젝트 중 Arrow 스크립트 가진 것들을 전부 찾아 등록
-        Arrow[] arrows = GetComponentsInChildren<Arrow>();
-        arrowsRemaining = arrows.Length;
-
-        foreach (Arrow arrow in arrows)
-        {
-            arrow.OnTaken += OnArrowTaken;
-        }
-
-        UIManager.Instance?.UpdateArrowCount(arrowsRemaining);
+        //Arrow[] arrows = GetComponentsInChildren<Arrow>();
+        //arrowsRemaining = arrows.Length;
+        //
+        //foreach (Arrow arrow in arrows)
+        //{
+        //    arrow.OnTaken += OnArrowTaken;
+        //}
+        //
+        //UIManager.Instance?.UpdateArrowCount(arrowsRemaining);
+        ResetBucket();
     }
 
     private void OnArrowTaken()
@@ -40,10 +41,14 @@ public class ArrowBucket : MonoBehaviour
 
         arrowsRemaining = totalArrowCount;
 
+
         for (int i = 0; i < totalArrowCount; i++)
         {
             GameObject newArrow = Instantiate(arrowPrefab, spawnRoot);
-            newArrow.transform.localPosition = Vector3.zero + Vector3.up * (i * 0.15f);
+
+            
+            Vector3 spawnPos = Vector3.up * (i * 0.12f); 
+            newArrow.transform.localPosition = spawnPos;
             newArrow.transform.localRotation = Quaternion.identity;
 
             Arrow arrow = newArrow.GetComponent<Arrow>();
@@ -54,9 +59,8 @@ public class ArrowBucket : MonoBehaviour
         }
 
         UIManager.Instance?.UpdateArrowCount(arrowsRemaining);
-
-        Debug.Log("[ArrowBucket] Reset complete and arrows respawned.");
     }
+
 
     public int GetArrowCount() => arrowsRemaining;
 }

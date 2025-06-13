@@ -21,13 +21,13 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        //int finalScore = ScoreManager.Instance?.GetScore() ?? 0;
+        int finalScore = ScoreManager.Instance?.GetScore() ?? 0;
 
-        //Debug.Log($"[GameManager] 게임 종료. 최종 점수: {finalScore}");
+        Debug.Log($"[GameManager] 게임 종료. 최종 점수: {finalScore}");
 
         if (resultUI != null)
         {
-            //resultUI.ShowResult(finalScore);
+            resultUI.ShowResult(finalScore);
         }
         else
         {

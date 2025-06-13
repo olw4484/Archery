@@ -7,6 +7,7 @@ public class ScoreManager : MonoBehaviour
 
     private int score = 0;
 
+
     [Header("UI Reference")]
     [SerializeField] private TextMeshProUGUI scoreText;
 
@@ -36,4 +37,6 @@ public class ScoreManager : MonoBehaviour
         score = 0;
         UpdateScoreUI();
     }
+
+    public int GetScore() => score;
 }
