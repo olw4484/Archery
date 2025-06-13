@@ -7,6 +7,8 @@ public class ArrowBucket : MonoBehaviour
 
     private int arrowsRemaining;
 
+    public bool IsDepleted() => arrowsRemaining <= 0;
+
     private void Start()
     {
         // 자식 오브젝트 중 Arrow 스크립트 가진 것들을 전부 찾아 등록
