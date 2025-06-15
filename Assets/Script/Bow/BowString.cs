@@ -15,6 +15,7 @@ public class BowString : MonoBehaviour
     [SerializeField] private float firePowerMultiplier = 30f;
 
     private XRGrabInteractable grabInteractable;
+    private float drawDistanceCache = 0f;
 
     private void Awake()
     {
@@ -24,30 +25,37 @@ public class BowString : MonoBehaviour
     private void OnEnable()
     {
         grabInteractable.selectExited.AddListener(OnReleased);
+
+        if (stringMover != null)
+            stringMover.OnRestored += OnStringRestored;
     }
 
     private void OnDisable()
     {
         grabInteractable.selectExited.RemoveListener(OnReleased);
+
+        if (stringMover != null)
+            stringMover.OnRestored -= OnStringRestored;
     }
 
     private void OnReleased(SelectExitEventArgs args)
     {
-        Debug.Log("[BowString] OnReleased called.");
-
-        float drawDistance = Vector3.Distance(stringRestPosition.position, transform.position);
-
-        if (bow != null && bow.HasArrow() && drawDistance >= minReleaseDistance)
-        {
-            float drawPercent = Mathf.Clamp01(drawDistance / maxDrawDistance);
-            float force = drawPercent * firePowerMultiplier;
-
-            bow.FireArrow(force);
-        }
-
-        //시위 위치 복원
+        drawDistanceCache = Vector3.Distance(stringRestPosition.position, transform.position);
         Debug.Log("[BowString] Requesting string restore.");
         stringMover?.OnStringReleased();
     }
+
+    private void OnStringRestored()
+    {
+        if (bow != null && bow.HasArrow() && drawDistanceCache >= minReleaseDistance)
+        {
+            float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
+            float force = drawPercent * firePowerMultiplier;
+            bow.FireArrow(force);
+        }
+
+        drawDistanceCache = 0f; // 초기화
+    }
+
 
 }

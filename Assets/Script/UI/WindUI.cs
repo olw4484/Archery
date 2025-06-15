@@ -10,7 +10,7 @@ public class WindUI : MonoBehaviour
 
     [Header("Rotation Settings")]
     [SerializeField] private bool rotateClockwise = false;
-
+    private bool isFired = false;
     private void Update()
     {
         if (WindManager.Instance == null) return;
@@ -32,4 +32,8 @@ public class WindUI : MonoBehaviour
 
         arrowImage.rotation = Quaternion.Euler(0, 0, angle);
     }
+
+    public bool IsFired() => isFired;
+
+    public void SetFired() => isFired = true;
 }

@@ -10,6 +10,7 @@ public class Arrow : MonoBehaviour
     private bool isFired = false;
     private bool grabbed = false;
     public bool IsFired() => isFired;
+    public void SetFired() => isFired = true;
 
     public event System.Action OnTaken;
 

@@ -13,6 +13,8 @@ public class BowStringMover : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private bool isReleased = false;
 
+    public System.Action OnRestored;
+
     public void OnStringReleased()
     {
         isReleased = true;
@@ -40,11 +42,12 @@ public class BowStringMover : MonoBehaviour
 
             if (direction.magnitude < 0.001f && velocity.magnitude < 0.01f)
             {
-               
                 stringMid.position = stringRestPosition.position;
-                stringPull.position = stringRestPosition.position; 
+                stringPull.position = stringRestPosition.position;
                 isReleased = false;
+
                 Debug.Log("[BowStringMover] 복원 완료. 위치 고정.");
+                OnRestored?.Invoke(); // 복원 완료 알림
             }
         }
     }
