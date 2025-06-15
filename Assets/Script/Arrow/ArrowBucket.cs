@@ -85,7 +85,7 @@ public class ArrowBucket : MonoBehaviour
         for (int i = 0; i < totalArrowCount; i++)
         {
             GameObject newArrow = Instantiate(arrowPrefab, spawnRoot);
-            Vector3 spawnPos = Vector3.up * (i * 0.12f - 0.25f); // 높이 및 보정
+            Vector3 spawnPos = Vector3.up * (i * 0.08f - 0.25f); // 높이 및 보정
             newArrow.transform.localPosition = spawnPos;
             newArrow.transform.localRotation = Quaternion.Euler(90, 0, 0); // 필요 시 각도 조정
 
@@ -97,7 +97,7 @@ public class ArrowBucket : MonoBehaviour
 
             UIManager.Instance?.UpdateArrowCount(arrowsRemaining);
 
-            yield return new WaitForSeconds(0.05f); // 너무 느리면 0.03f 정도로
+            yield return new WaitForSeconds(0.095f); // 너무 느리면 0.03f 정도로
         }
 
         Debug.Log("[ArrowBucket] All arrows spawned sequentially.");
