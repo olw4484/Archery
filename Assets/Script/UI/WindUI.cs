@@ -25,6 +25,11 @@ public class WindUI : MonoBehaviour
 
         angle -= 90f;
 
+        if (!rotateClockwise)
+        {
+            angle *= -1f; // 반시계 방향 회전
+        }
+
         arrowImage.rotation = Quaternion.Euler(0, 0, angle);
     }
 }

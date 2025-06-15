@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class ArrowBucket : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class ArrowBucket : MonoBehaviour
     [SerializeField] private int totalArrowCount = 10;
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform spawnRoot;
+    [SerializeField] private Transform arrowSocket;
 
+    private Arrow currentArrow;
     private int arrowsRemaining;
 
     public bool IsDepleted() => arrowsRemaining <= 0;
@@ -26,6 +29,38 @@ public class ArrowBucket : MonoBehaviour
         //UIManager.Instance?.UpdateArrowCount(arrowsRemaining);
         ResetBucket();
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (currentArrow != null) return; // 이미 장착된 화살이 있다면 무시
+
+        Arrow arrow = other.GetComponent<Arrow>();
+        if (arrow != null && !arrow.IsFired())
+        {
+            currentArrow = arrow;
+
+            // 화살을 소켓에 고정
+            currentArrow.transform.SetParent(arrowSocket);
+            currentArrow.transform.localPosition = Vector3.zero;
+            currentArrow.transform.localRotation = Quaternion.identity;
+
+            // XRGrabInteractable 비활성화
+            XRGrabInteractable grab = currentArrow.GetComponent<XRGrabInteractable>();
+            if (grab != null)
+            {
+                grab.enabled = false;
+            }
+
+            // Rigidbody 잠금
+            Rigidbody rb = currentArrow.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+            }
+
+            Debug.Log("[Bow] 화살이 소켓에 고정되었습니다.");
+        }
+    }
+
 
     private void OnArrowTaken()
     {
