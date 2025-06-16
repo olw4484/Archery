@@ -67,7 +67,7 @@ public class Bow : MonoBehaviour
         XRGrabInteractable grab = currentArrow.GetComponent<XRGrabInteractable>();
         if (grab != null)
         {
-            grab.enabled = true;
+            grab.enabled = false;
         }
 
         Rigidbody rb = currentArrow.GetComponent<Rigidbody>();
