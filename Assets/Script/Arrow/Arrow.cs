@@ -47,7 +47,14 @@ public class Arrow : MonoBehaviour
         rb.isKinematic = false;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.AddForce(direction * fireForce, ForceMode.Impulse);
+
+        // 바람 영향 적용
+        Vector3 windForce = WindManager.Instance != null ? WindManager.Instance.WindForce : Vector3.zero;
+
+        // 실제 힘 계산
+        Vector3 finalForce = direction * fireForce + windForce;
+
+        rb.AddForce(finalForce, ForceMode.Impulse);
     }
 
     public void ForceTaken()
