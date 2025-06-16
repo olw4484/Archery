@@ -110,9 +110,12 @@ public class Bow : MonoBehaviour
         currentArrow = arrow;
 
         arrow.transform.SetParent(arrowSocket);
-
-        arrow.transform.rotation = Quaternion.LookRotation(arrowSocket.forward, Vector3.up);
         arrow.transform.position = arrowSocket.position;
+
+        Vector3 dir = arrowSocket.position - stringPull.position;
+        VRDebugFile.Log("AttachArrow dir: " + dir);
+        Debug.DrawLine(arrowSocket.position, stringPull.position, Color.red, 3f);
+        arrow.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
 
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
         if (rb != null)
@@ -125,6 +128,7 @@ public class Bow : MonoBehaviour
         if (grab != null) grab.enabled = false;
     }
 
+
     private void UpdateArrowPosition()
     {
         if (currentArrow == null) return;
@@ -134,6 +138,9 @@ public class Bow : MonoBehaviour
 
         VRDebugFile.Log("[Check] stringPull.forward: " + stringPull.forward);
         VRDebugFile.Log("[Check] UpdateArrowPosition rotation: " + currentArrow.transform.rotation.eulerAngles);
-        currentArrow.transform.rotation = Quaternion.LookRotation(stringPull.position - arrowSocket.position,bowRoot.up);
+
+        Vector3 dir = arrowSocket.position - stringPull.position;
+        currentArrow.transform.rotation = Quaternion.LookRotation(dir, bowRoot.up);
     }
+
 }

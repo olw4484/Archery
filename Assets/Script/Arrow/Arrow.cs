@@ -50,11 +50,13 @@ public class Arrow : MonoBehaviour
 
     public void Fire(Vector3 direction)
     {
+
         VRDebugFile.Log("[Arrow.Fire] called! (isFired: " + isFired + ")");
         if (isFired) return;
         isFired = true;
-
+        transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
         transform.SetParent(null);
+
 
         rb.isKinematic = false;
         rb.velocity = Vector3.zero;
