@@ -58,13 +58,21 @@ public class BowString : MonoBehaviour
             bow.ResetBowPosition(); // 활 원위치 복구
         }
 
+        VRDebugFile.Log($"[OnStringRestored] bow.HasArrow: {bow?.HasArrow()}, drawDistanceCache: {drawDistanceCache}, minReleaseDistance: {minReleaseDistance}");
+
         if (bow != null && bow.HasArrow() && drawDistanceCache >= minReleaseDistance)
         {
             float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
             float force = drawPercent * firePowerMultiplier;
+            VRDebugFile.Log($"[OnStringRestored] FireArrow 호출! force: {force}, drawPercent: {drawPercent}");
             bow.FireArrow(force); // 외부에서 계산한 힘을 전달
         }
+        else
+        {
+            VRDebugFile.Log("[OnStringRestored] FireArrow 조건 불충족 - 발사 스킵");
+        }
 
-        drawDistanceCache = 0f;
+
+            drawDistanceCache = 0f;
     }
 }

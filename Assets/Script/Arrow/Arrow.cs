@@ -27,7 +27,7 @@ public class Arrow : MonoBehaviour
         forcePoint = transform.Find("ForcePoint"); 
         if (forcePoint == null)
         {
-            Debug.LogWarning($"[Arrow] ForcePoint가 누락되어 있습니다: {name}");
+            VRDebugFile.Log($"[Arrow] ForcePoint가 누락되어 있습니다: {name}");
         }
     }
 
@@ -50,21 +50,28 @@ public class Arrow : MonoBehaviour
 
     public void Fire(Vector3 direction)
     {
+        VRDebugFile.Log("[Arrow.Fire] called! (isFired: " + isFired + ")");
         if (isFired) return;
-
         isFired = true;
+
+        transform.SetParent(null);
+
         rb.isKinematic = false;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        // 바람 영향 적용
         Vector3 windForce = WindManager.Instance != null ? WindManager.Instance.WindForce : Vector3.zero;
-
-        // 실제 힘 계산
-        Vector3 finalForce = direction * fireForce + windForce;
+        Vector3 finalForce = direction.normalized * fireForce + windForce;
+        VRDebugFile.Log("[Arrow] Fire() force: " + finalForce);
 
         rb.AddForce(finalForce, ForceMode.Impulse);
+        VRDebugFile.Log("[Arrow.Fire] AddForce 후 velocity: " + rb.velocity);
+
+        XRGrabInteractable grab = GetComponent<XRGrabInteractable>();
+        if (grab != null) grab.enabled = false;
     }
+
+
 
     public void ForceTaken()
     {

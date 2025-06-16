@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Bow : MonoBehaviour
@@ -15,9 +14,8 @@ public class Bow : MonoBehaviour
     [SerializeField] private Transform stringPull;     // XRGrab 시위 끝
     [SerializeField] private Transform stringRestPos;  // 시위 기본 위치
     [SerializeField] private Transform bowRoot;
-    
+
     private Vector3 originalPosition;
-    private bool arrowFired = false;
 
     private void Start()
     {
@@ -31,58 +29,69 @@ public class Bow : MonoBehaviour
 
     private void Update()
     {
-#if UNITY_EDITOR
-        if (Keyboard.current.tKey.wasPressedThisFrame)
-        {
-            TryForceAttachNearestArrow();
-        }
-#endif
+    }
 
-        if (currentArrow == null) return;
-
-        Transform forcePoint = currentArrow.ForcePoint;
-        if (forcePoint != null)
-        {
-            Vector3 offset = currentArrow.transform.position - forcePoint.position;
-            currentArrow.transform.position = stringPull.position + offset;
-            currentArrow.transform.rotation = stringPull.rotation;
-        }
-
-        float drawDistance = Vector3.Distance(arrowSocket.position, stringHand.position);
-        if (drawDistance >= maxDrawDistance)
-        {
-            FireArrow(drawDistance);
-        }
+    private void FixedUpdate()
+    {
+        UpdateArrowPosition();
     }
 
     public void FireArrow(float force)
     {
-        if (currentArrow == null) return;
+        currentArrow.gameObject.SetActive(true);
+        VRDebugFile.Log($"[FireArrow] currentArrow 강제 활성화 시도");
+        VRDebugFile.Log("FireArrow 진입, currentArrow = " + (currentArrow != null ? currentArrow.name : "null"));
 
-        currentArrow.transform.SetParent(null);
-        currentArrow.Fire(arrowSocket.forward * force);
+        if (currentArrow == null)
+        {
+            VRDebugFile.Log("FireArrow: currentArrow is NULL!");
+            return;
+        }
 
+
+        Arrow arrowToFire = currentArrow;
         currentArrow = null;
 
-        Debug.Log("[Bow] 화살이 발사되었습니다.");
-    }
+        // stringPull 기준으로 발사 방향 결정
+        Vector3 fireDirection = (stringPull.position - arrowSocket.position).normalized;
+        VRDebugFile.Log($"[FireArrow] force: {force}  fireDirection: {fireDirection}");
+        VRDebugFile.Log($"[FireArrow] currentArrow 활성화 상태: {currentArrow.gameObject.activeInHierarchy}");
+        arrowToFire.transform.SetParent(null);
+        VRDebugFile.Log("FireArrow: currentArrow.Fire() 호출 직전");
+        arrowToFire.Fire(fireDirection * force);
+        VRDebugFile.Log("FireArrow: currentArrow.Fire() 호출 직후");
 
+        VRDebugFile.Log("[Bow] 화살이 발사되었습니다.");
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (currentArrow == null)
-        {
-            Arrow arrow = other.GetComponent<Arrow>();
-            if (arrow != null && !arrow.IsFired())
-            {
-                arrow.transform.position = arrowSocket.position;
-                arrow.transform.rotation = arrowSocket.rotation;
-                arrow.transform.SetParent(arrowSocket);
+        if (currentArrow != null) return;
 
-                AttachArrow(arrow);
+        Arrow arrow = other.GetComponent<Arrow>();
+        if (arrow != null && !arrow.IsFired())
+        {
+            XRGrabInteractable grab = arrow.GetComponent<XRGrabInteractable>();
+            if (grab != null && grab.isSelected && grab.interactorsSelecting.Count > 0)
+            {
+                grab.interactionManager.SelectExit(grab.interactorsSelecting[0], grab);
             }
+
+            if (grab != null) grab.enabled = false;
+
+            Rigidbody rb = arrow.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            AttachArrow(arrow);
+            VRDebugFile.Log("[Bow] 화살이 장착되었습니다 (손에서 해제).");
         }
     }
+
 
     public void SetDrawOffset(float drawPercent)
     {
@@ -100,37 +109,31 @@ public class Bow : MonoBehaviour
     {
         currentArrow = arrow;
 
-        // 방향은 ArrowSocket 기준
-        arrow.transform.rotation = arrowSocket.rotation;
+        arrow.transform.SetParent(arrowSocket);
 
-        // 위치는 String_Pull 기준
-        arrow.transform.position = stringPull.position;
+        arrow.transform.rotation = Quaternion.LookRotation(arrowSocket.forward, Vector3.up);
+        arrow.transform.position = arrowSocket.position;
 
-        arrow.transform.SetParent(transform);
-    }
-    private void TryForceAttachNearestArrow()
-    {
-        Collider[] hits = Physics.OverlapSphere(arrowSocket.position, 0.3f);
-        foreach (var hit in hits)
+        Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            Arrow arrow = hit.GetComponent<Arrow>();
-            if (arrow != null && !arrow.IsFired())
-            {
-                Debug.Log($"[Debug] T 키로 {arrow.name} 강제 장착");
-                arrow.transform.position = arrowSocket.position;
-                arrow.transform.rotation = arrowSocket.rotation;
-                arrow.transform.SetParent(arrowSocket);
-
-                XRGrabInteractable grab = arrow.GetComponent<XRGrabInteractable>();
-                if (grab != null) grab.enabled = false;
-
-                Rigidbody rb = arrow.GetComponent<Rigidbody>();
-                if (rb != null) rb.isKinematic = true;
-
-                AttachArrow(arrow);
-                break;
-            }
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
+        XRGrabInteractable grab = arrow.GetComponent<XRGrabInteractable>();
+        if (grab != null) grab.enabled = false;
     }
 
+    private void UpdateArrowPosition()
+    {
+        if (currentArrow == null) return;
+
+        Vector3 offset = currentArrow.transform.position - currentArrow.ForcePoint.position;
+        currentArrow.transform.position = stringPull.position + offset;
+
+        VRDebugFile.Log("[Check] stringPull.forward: " + stringPull.forward);
+        VRDebugFile.Log("[Check] UpdateArrowPosition rotation: " + currentArrow.transform.rotation.eulerAngles);
+        currentArrow.transform.rotation = Quaternion.LookRotation(stringPull.position - arrowSocket.position,bowRoot.up);
+    }
 }

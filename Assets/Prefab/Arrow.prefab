@@ -53,15 +53,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.649
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.606
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.142
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -110,10 +110,10 @@ PrefabInstance:
       addedObject: {fileID: 6110389353119699986}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7603328158605860031}
+      addedObject: {fileID: 4332138645441127154}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1930387711485377090}
+      addedObject: {fileID: 7603328158605860031}
   m_SourcePrefab: {fileID: 100100000, guid: 43441d06b40aec24fb0768f73bd0611e, type: 3}
 --- !u!4 &2605640762944368963 stripped
 Transform:
@@ -173,6 +173,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4332138645441127154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3414512312254721017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea633ff586bc5640b3ea93187ef116c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireForce: 20
 --- !u!114 &7603328158605860031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,16 +308,3 @@ MonoBehaviour:
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
   m_FarAttachMode: 0
---- !u!114 &1930387711485377090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3414512312254721017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ea633ff586bc5640b3ea93187ef116c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireForce: 20

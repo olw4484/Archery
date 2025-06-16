@@ -1,10 +1,10 @@
 {
   "dependencies": {
+    "com.unity.burst": "1.8.22",
     "com.unity.collab-proxy": "2.7.1",
     "com.unity.feature.development": "1.0.1",
     "com.unity.feature.vr": "1.0.0",
     "com.unity.inputsystem": "1.14.0",
-    "com.unity.learn.iet-framework": "4.0.4",
     "com.unity.render-pipelines.universal": "14.0.12",
     "com.unity.textmeshpro": "3.0.9",
     "com.unity.timeline": "1.7.7",

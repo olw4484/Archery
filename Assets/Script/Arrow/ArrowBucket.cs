@@ -97,7 +97,7 @@ public class ArrowBucket : MonoBehaviour
 
             UIManager.Instance?.UpdateArrowCount(arrowsRemaining);
 
-            yield return new WaitForSeconds(0.095f); // 너무 느리면 0.03f 정도로
+            yield return new WaitForSeconds(0.1f); // 너무 느리면 0.03f 정도로
         }
 
         Debug.Log("[ArrowBucket] All arrows spawned sequentially.");
