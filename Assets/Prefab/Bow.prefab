@@ -263,6 +263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1812717824580564098}
+  - component: {fileID: 7577444176081074601}
   m_Layer: 0
   m_Name: Arrow_Socket
   m_TagString: Untagged
@@ -285,6 +286,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3252678240698892442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7577444176081074601
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7386049906848125221}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8390493388338971546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -550,12 +572,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.04, y: 0.15, z: 0.049999997}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0.08, y: -0.008, z: -0.13}
 --- !u!114 &-3453533698426602195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,6 +594,9 @@ MonoBehaviour:
   stringHand: {fileID: 0}
   maxDrawDistance: 0.5
   fireMultiplier: 30
+  stringPull: {fileID: 0}
+  stringRestPos: {fileID: 0}
+  bowRoot: {fileID: 0}
 --- !u!114 &4242863807806876743
 MonoBehaviour:
   m_ObjectHideFlags: 0

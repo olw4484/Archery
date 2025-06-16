@@ -2288,10 +2288,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1257137830907418595, guid: c7b4edf52f794fe43a9bd210e364e52c, type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8290808696867460517, guid: c7b4edf52f794fe43a9bd210e364e52c, type: 3}
       propertyPath: stringMover
       value: 
@@ -2310,7 +2306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8357480470686475377, guid: c7b4edf52f794fe43a9bd210e364e52c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.6
+      value: 0.619
       objectReference: {fileID: 0}
     - target: {fileID: 8357480470686475377, guid: c7b4edf52f794fe43a9bd210e364e52c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2571,7 +2567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9030019044010068004, guid: 4d8bafba925d31c449972fac9c7dc37f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 9030019044010068004, guid: 4d8bafba925d31c449972fac9c7dc37f, type: 3}
       propertyPath: m_LocalScale.z
