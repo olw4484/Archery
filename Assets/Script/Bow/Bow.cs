@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Bow : MonoBehaviour
@@ -29,6 +30,13 @@ public class Bow : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            TryForceAttachNearestArrow();
+        }
+#endif
+
         if (currentArrow == null) return;
 
         if (!arrowFired)
@@ -114,4 +122,29 @@ public class Bow : MonoBehaviour
         currentArrow = arrowTransform.GetComponent<Arrow>();
         arrowFired = false;
     }
+    private void TryForceAttachNearestArrow()
+    {
+        Collider[] hits = Physics.OverlapSphere(arrowSocket.position, 0.3f);
+        foreach (var hit in hits)
+        {
+            Arrow arrow = hit.GetComponent<Arrow>();
+            if (arrow != null && !arrow.IsFired())
+            {
+                Debug.Log($"[Debug] T 키로 {arrow.name} 강제 장착");
+                arrow.transform.position = arrowSocket.position;
+                arrow.transform.rotation = arrowSocket.rotation;
+                arrow.transform.SetParent(arrowSocket);
+
+                XRGrabInteractable grab = arrow.GetComponent<XRGrabInteractable>();
+                if (grab != null) grab.enabled = false;
+
+                Rigidbody rb = arrow.GetComponent<Rigidbody>();
+                if (rb != null) rb.isKinematic = true;
+
+                AttachArrow(arrow.transform);
+                break;
+            }
+        }
+    }
+
 }

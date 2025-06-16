@@ -12,6 +12,8 @@ public class Arrow : MonoBehaviour
     public bool IsFired() => isFired;
     public void SetFired() => isFired = true;
 
+    public bool IsGrabbed() => grabbed;
+
     public event System.Action OnTaken;
 
     [SerializeField] private float fireForce = 20f;
