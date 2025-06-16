@@ -62,7 +62,7 @@ public class BowString : MonoBehaviour
         {
             float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
             float force = drawPercent * firePowerMultiplier;
-            bow.FireArrow(force);
+            bow.FireArrow(force); // 외부에서 계산한 힘을 전달
         }
 
         drawDistanceCache = 0f;

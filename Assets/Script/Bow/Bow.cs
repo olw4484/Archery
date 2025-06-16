@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class Bow : MonoBehaviour
 {
     [Header("Arrow Socket")]
-    public Transform arrowSocket; // 화살 장착 위치
+    [SerializeField] private Transform arrowSocket; // 화살 장착 위치
     private Arrow currentArrow;
 
     [Header("Draw Settings")]
@@ -15,6 +15,7 @@ public class Bow : MonoBehaviour
     [SerializeField] private Transform stringPull;     // XRGrab 시위 끝
     [SerializeField] private Transform stringRestPos;  // 시위 기본 위치
     [SerializeField] private Transform bowRoot;
+    
     private Vector3 originalPosition;
     private bool arrowFired = false;
 
@@ -39,9 +40,11 @@ public class Bow : MonoBehaviour
 
         if (currentArrow == null) return;
 
-        if (!arrowFired)
+        Transform forcePoint = currentArrow.ForcePoint;
+        if (forcePoint != null)
         {
-            currentArrow.transform.position = stringPull.position;
+            Vector3 offset = currentArrow.transform.position - forcePoint.position;
+            currentArrow.transform.position = stringPull.position + offset;
             currentArrow.transform.rotation = stringPull.rotation;
         }
 
@@ -52,38 +55,14 @@ public class Bow : MonoBehaviour
         }
     }
 
-    public void FireArrow(float drawDistance)
+    public void FireArrow(float force)
     {
         if (currentArrow == null) return;
 
-        // 발사 방향: 화살이 향한 방향 기준
-        Vector3 fireDirection = arrowSocket.forward;
-
-        float force = Mathf.Clamp01(drawDistance / maxDrawDistance) * fireMultiplier;
-
-        // 고정 해제
         currentArrow.transform.SetParent(null);
+        currentArrow.Fire(arrowSocket.forward * force);
 
-        XRGrabInteractable grab = currentArrow.GetComponent<XRGrabInteractable>();
-        if (grab != null)
-        {
-            grab.enabled = false;
-        }
-
-        Rigidbody rb = currentArrow.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.AddForce(fireDirection * force, ForceMode.Impulse);
-        }
-
-        currentArrow.SetFired(); // fired 상태 저장
-        arrowFired = true;
-        currentArrow = null; // 다음 화살 장착 가능 상태로 전환
-
-
+        currentArrow = null;
 
         Debug.Log("[Bow] 화살이 발사되었습니다.");
     }
@@ -100,7 +79,7 @@ public class Bow : MonoBehaviour
                 arrow.transform.rotation = arrowSocket.rotation;
                 arrow.transform.SetParent(arrowSocket);
 
-                AttachArrow(arrow.transform);
+                AttachArrow(arrow);
             }
         }
     }
@@ -117,10 +96,17 @@ public class Bow : MonoBehaviour
         bowRoot.localPosition = originalPosition;
     }
 
-    public void AttachArrow(Transform arrowTransform)
+    public void AttachArrow(Arrow arrow)
     {
-        currentArrow = arrowTransform.GetComponent<Arrow>();
-        arrowFired = false;
+        currentArrow = arrow;
+
+        // 방향은 ArrowSocket 기준
+        arrow.transform.rotation = arrowSocket.rotation;
+
+        // 위치는 String_Pull 기준
+        arrow.transform.position = stringPull.position;
+
+        arrow.transform.SetParent(transform);
     }
     private void TryForceAttachNearestArrow()
     {
@@ -141,7 +127,7 @@ public class Bow : MonoBehaviour
                 Rigidbody rb = arrow.GetComponent<Rigidbody>();
                 if (rb != null) rb.isKinematic = true;
 
-                AttachArrow(arrow.transform);
+                AttachArrow(arrow);
                 break;
             }
         }

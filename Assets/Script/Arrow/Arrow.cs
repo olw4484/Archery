@@ -9,9 +9,10 @@ public class Arrow : MonoBehaviour
 
     private bool isFired = false;
     private bool grabbed = false;
+    private Transform forcePoint;
     public bool IsFired() => isFired;
     public void SetFired() => isFired = true;
-
+    public Transform ForcePoint => forcePoint;
     public bool IsGrabbed() => grabbed;
 
     public event System.Action OnTaken;
@@ -22,6 +23,12 @@ public class Arrow : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         grabInteractable = GetComponent<XRGrabInteractable>();
+
+        forcePoint = transform.Find("ForcePoint"); 
+        if (forcePoint == null)
+        {
+            Debug.LogWarning($"[Arrow] ForcePoint가 누락되어 있습니다: {name}");
+        }
     }
 
     private void OnEnable()
