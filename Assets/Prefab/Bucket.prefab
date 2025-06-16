@@ -73,8 +73,9 @@ GameObject:
   - component: {fileID: 9030019044010068004}
   - component: {fileID: 4244766619730557674}
   - component: {fileID: 5678684252725667432}
-  - component: {fileID: 5928546571357402106}
   - component: {fileID: 5487254194889503775}
+  - component: {fileID: 5151226760304184786}
+  - component: {fileID: 6758674330111729807}
   m_Layer: 0
   m_Name: Bucket
   m_TagString: Untagged
@@ -160,22 +161,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5928546571357402106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8768314877933063466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 804ee19d94819a443ae991fb8dad1de2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  totalArrowCount: 10
-  arrowPrefab: {fileID: 3414512312254721017, guid: c95d2c8b05d17534baf64c9c16b6ff67, type: 3}
-  spawnRoot: {fileID: 1639525196498343025}
-  arrowSocket: {fileID: 0}
 --- !u!64 &5487254194889503775
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -198,6 +183,36 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4996815420324920757, guid: 8b477782acc61da44bc73b0113453bda, type: 3}
+--- !u!114 &5151226760304184786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768314877933063466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 804ee19d94819a443ae991fb8dad1de2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalArrowCount: 10
+  arrowPool: {fileID: 6758674330111729807}
+  spawnRoot: {fileID: 1639525196498343025}
+  arrowSocket: {fileID: 1639525196498343025}
+--- !u!114 &6758674330111729807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768314877933063466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7aca062322fc3d42bb70f86dfff3dbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 3414512312254721017, guid: c95d2c8b05d17534baf64c9c16b6ff67, type: 3}
+  poolSize: 10
 --- !u!1001 &227773055609545056
 PrefabInstance:
   m_ObjectHideFlags: 0

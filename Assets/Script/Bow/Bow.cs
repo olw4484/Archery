@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Bow : MonoBehaviour
@@ -36,33 +37,70 @@ public class Bow : MonoBehaviour
         UpdateArrowPosition();
     }
 
+    //public void FireArrow(float force)
+    //{
+    //    currentArrow.gameObject.SetActive(true);
+    //    VRDebugFile.Log($"[FireArrow] currentArrow 강제 활성화 시도");
+    //    VRDebugFile.Log("FireArrow 진입, currentArrow = " + (currentArrow != null ? currentArrow.name : "null"));
+    //
+    //    if (currentArrow == null)
+    //    {
+    //        VRDebugFile.Log("FireArrow: currentArrow is NULL!");
+    //        return;
+    //    }
+    //
+    //
+    //    Arrow arrowToFire = currentArrow;
+    //    currentArrow = null;
+    //
+    //    // stringPull 기준으로 발사 방향 결정
+    //    Vector3 fireDirection = (arrowSocket.position - stringPull.position).normalized;
+    //    VRDebugFile.Log($"[FireArrow] force: {force}  fireDirection: {fireDirection}");
+    //    VRDebugFile.Log("FireArrow: arrowToFire = " + (arrowToFire != null ? "OK" : "NULL"));
+    //    VRDebugFile.Log($"[FireArrow] currentArrow 활성화 상태: {currentArrow.gameObject.activeInHierarchy}");
+    //
+    //
+    //    try
+    //    {
+    //        arrowToFire.transform.SetParent(null);
+    //        VRDebugFile.Log("FireArrow: SetParent 완료");
+    //        arrowToFire.Fire(fireDirection * force);
+    //        VRDebugFile.Log("FireArrow: Fire() 호출 완료");
+    //    }
+    //    catch (System.Exception e)
+    //    {
+    //        VRDebugFile.Log("[FireArrow] Exception: " + e.Message + "\n" + e.StackTrace);
+    //    }
+    //    arrowToFire.transform.SetParent(null);
+    //    VRDebugFile.Log("FireArrow: currentArrow.Fire() 호출 직전");
+    //    arrowToFire.Fire(fireDirection * force);
+    //    VRDebugFile.Log("FireArrow: currentArrow.Fire() 호출 직후");
+    //
+    //    VRDebugFile.Log("[Bow] 화살이 발사되었습니다.");
+    //}
+
     public void FireArrow(float force)
     {
-        currentArrow.gameObject.SetActive(true);
-        VRDebugFile.Log($"[FireArrow] currentArrow 강제 활성화 시도");
-        VRDebugFile.Log("FireArrow 진입, currentArrow = " + (currentArrow != null ? currentArrow.name : "null"));
-
-        if (currentArrow == null)
-        {
-            VRDebugFile.Log("FireArrow: currentArrow is NULL!");
-            return;
-        }
-
-
         Arrow arrowToFire = currentArrow;
+
         currentArrow = null;
 
-        // stringPull 기준으로 발사 방향 결정
-        Vector3 fireDirection = (stringPull.position - arrowSocket.position).normalized;
-        VRDebugFile.Log($"[FireArrow] force: {force}  fireDirection: {fireDirection}");
-        VRDebugFile.Log($"[FireArrow] currentArrow 활성화 상태: {currentArrow.gameObject.activeInHierarchy}");
-        arrowToFire.transform.SetParent(null);
-        VRDebugFile.Log("FireArrow: currentArrow.Fire() 호출 직전");
-        arrowToFire.Fire(fireDirection * force);
-        VRDebugFile.Log("FireArrow: currentArrow.Fire() 호출 직후");
+        Vector3 fireDirection = (arrowSocket.position - stringPull.position).normalized;
 
-        VRDebugFile.Log("[Bow] 화살이 발사되었습니다.");
+        StartCoroutine(FireArrowCoroutine(arrowToFire, fireDirection * force));
     }
+
+    private IEnumerator FireArrowCoroutine(Arrow arrow, Vector3 finalForce)
+    {
+        yield return new WaitForFixedUpdate();
+
+        arrow.transform.SetParent(null);
+
+        arrow.Fire(finalForce);
+
+        VRDebugFile.Log("[FireArrowCoroutine] 화살 발사 완료, force: " + finalForce);
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -83,6 +121,8 @@ public class Bow : MonoBehaviour
             if (rb != null)
             {
                 rb.isKinematic = true;
+                VRDebugFile.Log("[AttachArrow] isKinematic = true");
+                rb.WakeUp();
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
