@@ -41,12 +41,23 @@ public class BowString : MonoBehaviour
     private void OnReleased(SelectExitEventArgs args)
     {
         drawDistanceCache = Vector3.Distance(stringRestPosition.position, transform.position);
-        Debug.Log("[BowString] Requesting string restore.");
+
+        if (bow != null)
+        {
+            float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
+            bow.SetDrawOffset(drawPercent);
+        }
+
         stringMover?.OnStringReleased();
     }
 
     private void OnStringRestored()
     {
+        if (bow != null)
+        {
+            bow.ResetBowPosition(); // 활 원위치 복구
+        }
+
         if (bow != null && bow.HasArrow() && drawDistanceCache >= minReleaseDistance)
         {
             float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
@@ -54,8 +65,6 @@ public class BowString : MonoBehaviour
             bow.FireArrow(force);
         }
 
-        drawDistanceCache = 0f; // 초기화
+        drawDistanceCache = 0f;
     }
-
-
 }
