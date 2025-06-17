@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -44,16 +45,22 @@ public class BowString : MonoBehaviour
         {
             float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
             float force = drawPercent * firePowerMultiplier;
-            VRDebugFile.Log($"[OnReleased] 즉시 FireArrow 호출! force: {force}, drawPercent: {drawPercent}");
-            bow.FireArrow(force);
+            VRDebugFile.Log($"[OnReleased] (딜레이 후) FireArrow 호출 예정! force: {force}, drawPercent: {drawPercent}");
+            StartCoroutine(FireArrowAfterDelay(force));
         }
         else
         {
             VRDebugFile.Log("[OnReleased] FireArrow 조건 불충족 - 발사 스킵");
         }
 
-        stringMover?.OnStringReleased(); 
+        stringMover?.OnStringReleased();
         drawDistanceCache = 0f;
+    }
+
+    private IEnumerator FireArrowAfterDelay(float force)
+    {
+        yield return new WaitForSeconds(0.07f); // 상황 따라 0.1f까지 조절 가능
+        bow.FireArrow(force);
     }
 
     private void OnStringRestored()

@@ -34,7 +34,7 @@ public class Target : MonoBehaviour
         else if (ratio < 0.95f) score = 2;
         else if (ratio <= 1f) score = 1;
 
-        Debug.Log($"[Target] Hit registered! Distance: {distance:F2}, Score: {score}");
+        VRDebugFile.Log($"[Target] Hit registered! Distance: {distance:F2}, Score: {score}");
         ScoreManager.Instance?.AddScore(score);
     }
 }

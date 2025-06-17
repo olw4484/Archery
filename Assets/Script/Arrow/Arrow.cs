@@ -15,10 +15,12 @@ public class Arrow : MonoBehaviour
 
     private bool isFired = false;
     private bool grabbed = false;
+    private bool stuck = false;
 
     public bool IsFired() => isFired;
     public void SetFired() => isFired = true;
     public bool IsGrabbed() => grabbed;
+    
     public Transform ForcePoint => forcePoint;
 
     public event System.Action OnTaken;
@@ -37,8 +39,20 @@ public class Arrow : MonoBehaviour
 
     private void OnEnable()
     {
+        VRDebugFile.Log("[Arrow] OnEnable! 콜라이더: " + (arrowCollider != null ? arrowCollider.enabled.ToString() : "null") +
+          ", isKinematic: " + (rb != null ? rb.isKinematic.ToString() : "null"));
+
         if (grabInteractable != null)
             grabInteractable.selectEntered.AddListener(OnGrab);
+
+        if (arrowCollider != null)
+            arrowCollider.enabled = true;
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     private void OnDisable()
@@ -46,6 +60,28 @@ public class Arrow : MonoBehaviour
         if (grabInteractable != null)
             grabInteractable.selectEntered.RemoveListener(OnGrab);
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (!isFired || stuck) return;
+        Target target = collision.collider.GetComponentInParent<Target>();
+        if (target != null)
+        {
+            ContactPoint contact = collision.contacts[0];
+            float depthOffset = 0.03f;
+            transform.position = contact.point + (-contact.normal * depthOffset);
+            transform.rotation = Quaternion.LookRotation(-contact.normal, Vector3.up);
+
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.Sleep(); 
+            transform.SetParent(target.transform);
+            if (arrowCollider != null)
+                arrowCollider.enabled = false;
+            stuck = true;
+        }
+    }
+
 
     private void OnGrab(SelectEnterEventArgs args)
     {
@@ -56,42 +92,29 @@ public class Arrow : MonoBehaviour
 
     public void Fire(Vector3 force)
     {
+        VRDebugFile.Log("[Arrow] Fire() 호출! 콜라이더: " + (arrowCollider != null ? arrowCollider.enabled.ToString() : "null") +
+              ", isKinematic: " + (rb != null ? rb.isKinematic.ToString() : "null"));
         try
         {
-            if (isFired)
-            {
-                VRDebugFile.Log("[Arrow] 이미 발사됨, Fire() 무시");
-                return;
-            }
+            if (isFired) return;
             isFired = true;
-            VRDebugFile.Log("[Arrow] Fire() 진입");
-
 
             transform.SetParent(null);
-
-
             rb.isKinematic = false;
+            VRDebugFile.Log("[Arrow] Fire() 후 isKinematic: " + rb.isKinematic);
             rb.WakeUp();
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
             if (arrowCollider != null)
-            {
-                arrowCollider.enabled = false;
-                Invoke(nameof(EnableCollider), 0.2f);
-            }
-
+                arrowCollider.enabled = true;
 
             if (grabInteractable != null)
                 grabInteractable.enabled = false;
 
-
-            VRDebugFile.Log("[Arrow] AddForce: " + force);
             rb.AddForce(force, ForceMode.Impulse);
 
             StartCoroutine(LogVelocityAfterPhysics());
-
-            VRDebugFile.Log("[Arrow] Fire() 완료");
         }
         catch (System.Exception e)
         {
@@ -99,10 +122,10 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    private void EnableCollider()
-    {
-        if (arrowCollider != null) arrowCollider.enabled = true;
-    }
+   //private void EnableCollider()
+   //{
+   //    if (arrowCollider != null) arrowCollider.enabled = true;
+   //}
 
     private IEnumerator LogVelocityAfterPhysics()
     {
