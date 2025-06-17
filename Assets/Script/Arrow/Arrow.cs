@@ -117,7 +117,10 @@ public class Arrow : MonoBehaviour
             if (grabInteractable != null)
                 grabInteractable.enabled = false;
 
-            rb.AddForce(force, ForceMode.Impulse);
+            Vector3 wind = WindManager.Instance != null ? WindManager.Instance.WindForce : Vector3.zero;
+            Vector3 finalForce = force + wind;
+
+            rb.AddForce(finalForce, ForceMode.Impulse);
 
             StartCoroutine(LogVelocityAfterPhysics());
         }
@@ -127,10 +130,10 @@ public class Arrow : MonoBehaviour
         }
     }
 
-   //private void EnableCollider()
-   //{
-   //    if (arrowCollider != null) arrowCollider.enabled = true;
-   //}
+    //private void EnableCollider()
+    //{
+    //    if (arrowCollider != null) arrowCollider.enabled = true;
+    //}
 
     private IEnumerator LogVelocityAfterPhysics()
     {
