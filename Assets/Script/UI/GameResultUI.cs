@@ -31,7 +31,7 @@ public class GameResultUI : MonoBehaviour
         resultPanel.interactable = false;
         resultPanel.blocksRaycasts = false;
     }
-    private void OnRetry()
+    public void OnRetry()
     {
         GameManager gm = FindObjectOfType<GameManager>();
         if (gm != null)
