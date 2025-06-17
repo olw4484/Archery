@@ -63,10 +63,13 @@ public class Arrow : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (!isFired || stuck) return;
-        Target target = collision.collider.GetComponentInParent<Target>();
-        if (target != null)
+
+        TargetZone zone = collision.collider.GetComponent<TargetZone>();
+        if (zone != null)
         {
             ContactPoint contact = collision.contacts[0];
+            zone.AddScore(contact.point);
+
             float depthOffset = 0.03f;
             transform.position = contact.point + (-contact.normal * depthOffset);
             transform.rotation = Quaternion.LookRotation(-contact.normal, Vector3.up);
@@ -74,11 +77,13 @@ public class Arrow : MonoBehaviour
             rb.isKinematic = true;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            rb.Sleep(); 
-            transform.SetParent(target.transform);
+            rb.Sleep();
+            transform.SetParent(zone.transform);
             if (arrowCollider != null)
                 arrowCollider.enabled = false;
+
             stuck = true;
+            return;
         }
     }
 
