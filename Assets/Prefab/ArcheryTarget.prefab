@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2302270926053993171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1012633090607048129}
+  m_Layer: 0
+  m_Name: CentPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1012633090607048129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2302270926053993171}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: 0.000000021855694, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8992459523000736341}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &677995226939923457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -107,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 8
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!1001 &2301248555364413622
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -214,6 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 6
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!1001 &2564076087483246094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -316,6 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 7
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!4 &5254559864496986360 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7745804084256259830, guid: b475298896516ea4b8f3052a0731777e, type: 3}
@@ -423,6 +457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 2
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!4 &5645883215567613211 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7745804084256259830, guid: b475298896516ea4b8f3052a0731777e, type: 3}
@@ -530,6 +565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!4 &3318093907843011484 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7745804084256259830, guid: b475298896516ea4b8f3052a0731777e, type: 3}
@@ -637,6 +673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!4 &3199147770146581665 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7745804084256259830, guid: b475298896516ea4b8f3052a0731777e, type: 3}
@@ -749,6 +786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 9
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!1001 &5913516453367707896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -851,6 +889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 5
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!4 &4138693865474737678 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7745804084256259830, guid: b475298896516ea4b8f3052a0731777e, type: 3}
@@ -963,6 +1002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!1001 &8149368059934754759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -981,7 +1021,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dff2f46a6ab0b7b4db9c6dd1e38cb335, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dff2f46a6ab0b7b4db9c6dd1e38cb335, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1058,6 +1098,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 996418497009081746, guid: dff2f46a6ab0b7b4db9c6dd1e38cb335, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3318093907843011484}
+    - targetCorrespondingSourceObject: {fileID: 996418497009081746, guid: dff2f46a6ab0b7b4db9c6dd1e38cb335, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1012633090607048129}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -3704563456361051248, guid: dff2f46a6ab0b7b4db9c6dd1e38cb335, type: 3}
       insertIndex: -1
@@ -1227,6 +1270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 11
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!4 &2170642362829025283 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7745804084256259830, guid: b475298896516ea4b8f3052a0731777e, type: 3}
@@ -1339,6 +1383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 3
+  centerPoint: {fileID: 1012633090607048129}
 --- !u!1001 &8831316934356306385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1446,3 +1491,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 4
+  centerPoint: {fileID: 1012633090607048129}
