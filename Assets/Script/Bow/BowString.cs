@@ -25,7 +25,6 @@ public class BowString : MonoBehaviour
     private void OnEnable()
     {
         grabInteractable.selectExited.AddListener(OnReleased);
-
         if (stringMover != null)
             stringMover.OnRestored += OnStringRestored;
     }
@@ -33,7 +32,6 @@ public class BowString : MonoBehaviour
     private void OnDisable()
     {
         grabInteractable.selectExited.RemoveListener(OnReleased);
-
         if (stringMover != null)
             stringMover.OnRestored -= OnStringRestored;
     }
@@ -42,37 +40,27 @@ public class BowString : MonoBehaviour
     {
         drawDistanceCache = Vector3.Distance(stringRestPosition.position, transform.position);
 
-        if (bow != null)
+        if (bow != null && bow.HasArrow() && drawDistanceCache >= minReleaseDistance)
         {
             float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
-            bow.SetDrawOffset(drawPercent);
+            float force = drawPercent * firePowerMultiplier;
+            VRDebugFile.Log($"[OnReleased] 즉시 FireArrow 호출! force: {force}, drawPercent: {drawPercent}");
+            bow.FireArrow(force);
+        }
+        else
+        {
+            VRDebugFile.Log("[OnReleased] FireArrow 조건 불충족 - 발사 스킵");
         }
 
-        stringMover?.OnStringReleased();
+        stringMover?.OnStringReleased(); 
+        drawDistanceCache = 0f;
     }
 
     private void OnStringRestored()
     {
         if (bow != null)
         {
-            bow.ResetBowPosition(); // 활 원위치 복구
+            bow.ResetBowPosition(); 
         }
-
-        VRDebugFile.Log($"[OnStringRestored] bow.HasArrow: {bow?.HasArrow()}, drawDistanceCache: {drawDistanceCache}, minReleaseDistance: {minReleaseDistance}");
-
-        if (bow != null && bow.HasArrow() && drawDistanceCache >= minReleaseDistance)
-        {
-            float drawPercent = Mathf.Clamp01(drawDistanceCache / maxDrawDistance);
-            float force = drawPercent * firePowerMultiplier;
-            VRDebugFile.Log($"[OnStringRestored] FireArrow 호출! force: {force}, drawPercent: {drawPercent}");
-            bow.FireArrow(force); // 외부에서 계산한 힘을 전달
-        }
-        else
-        {
-            VRDebugFile.Log("[OnStringRestored] FireArrow 조건 불충족 - 발사 스킵");
-        }
-
-
-            drawDistanceCache = 0f;
     }
 }
